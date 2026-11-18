@@ -1,3 +1,15 @@
+const additional = document.querySelector('#mas-proyectos');
+
+function revealDetailsForHash() {
+  const linkedSection = document.getElementById(location.hash.slice(1));
+  if (linkedSection && additional.contains(linkedSection) && linkedSection !== additional) {
+    additional.open = true;
+  }
+}
+
+revealDetailsForHash();
+window.addEventListener('hashchange', revealDetailsForHash);
+
 const form = document.querySelector('#guia');
 const result = document.querySelector('#resultado');
 const steps = Array.from(form.querySelectorAll('fieldset'));
@@ -207,20 +219,3 @@ window.addEventListener('hashchange', () => {
 filterBox.hidden = false;
 renderGoals(goals);
 
-const radioShare = document.querySelector('#compartir-radio');
-const radioFeedback = document.querySelector('#radio-feedback');
-const radioUrl = document.querySelector('#radio a[href^="https://lta-radio."]').href;
-radioShare.hidden = !navigator.share && !navigator.clipboard;
-radioShare.addEventListener('click', async () => {
-  radioFeedback.textContent = '';
-  try {
-    if (navigator.share) {
-      await navigator.share({ title: 'LT+A Radio · La Tecnología + Avanzada', url: radioUrl });
-    } else {
-      await navigator.clipboard.writeText(radioUrl);
-      radioFeedback.textContent = 'Enlace copiado.';
-    }
-  } catch (error) {
-    if (error.name !== 'AbortError') radioFeedback.textContent = 'Podés copiar el enlace desde «Escuchá LT+A Radio».';
-  }
-});
